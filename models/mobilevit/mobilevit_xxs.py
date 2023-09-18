@@ -5,8 +5,8 @@ model_cfg = dict(
     neck=dict(type='GlobalAveragePooling'),
     head=dict(
         type='LinearClsHead',
-        num_classes=1000,
-        in_channels=320,
+        num_classes=16,
+        in_channels=640,
         loss=dict(type='CrossEntropyLoss', loss_weight=1.0),
         topk=(1, 5),
     ))
@@ -35,11 +35,11 @@ val_pipeline = [
 
 # train
 data_cfg = dict(
-    batch_size = 32,
+    batch_size = 16,
     num_workers = 2,
     train = dict(
         pretrained_flag = True,
-        pretrained_weights = 'mobilevit-small_3rdparty_in1k_20221018-cb4f741c.pth',
+        pretrained_weights = 'pretrain/mobilevit-small_3rdparty_in1k_20221018-cb4f741c.pth',
         freeze_flag = False,
         freeze_layers = ('backbone',),
         epoches = 100,

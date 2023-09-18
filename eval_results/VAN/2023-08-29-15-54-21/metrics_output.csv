@@ -1,0 +1,10 @@
+Classes,Precision,Recall,F1 Score,Average Precision
+Normal,100.00,100.00,100.00,100.00
+Wrong,0.00,0.00,0.00,-0.00
+
+Top-1 Acc,Top-5 Acc,Mean Precision,Mean Recall,Mean F1 Score
+100.00,100.00,50.00,50.00,50.00
+
+ ,Normal,Wrong
+Normal,44,0
+Wrong,0,0
