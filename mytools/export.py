@@ -43,7 +43,8 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-
+### 修改--config的路径，并在该--config文件中修改test模型的路径
+### python mytools/export.py --config mycfg/models/mobilenet_v3_small.py
 def main():
     args = parse_args()
     model_cfg, data_cfg, lr_config, optimizer_cfg = netcfg2dict(args.config)
@@ -52,7 +53,7 @@ def main():
     获取类别名以及对应索引、获取标注文件
     """
     classes_map = 'mydatas/annotations.txt'
-    test_annotations = 'mydatas/test2.txt'
+    test_annotations = 'mydatas/val2.txt'
     classes_names, indexs = get_info(classes_map)
     with open(test_annotations, encoding='utf-8') as f:
         test_datas = f.readlines()
@@ -100,6 +101,7 @@ def main():
     image_path = r"E:\Datasets\YOLOv8_cls\Windings\val2\Normal\Z106_Normal_Fri_May_26_07_16_11_2023_00000.jpg"
     x = cv2.imread(image_path)
     x = cv2.resize(x, (net_size[1], net_size[0]))
+    print(x[100:102, 160:165, 0])
     x = cv2.cvtColor(x, cv2.COLOR_BGR2RGB)
     x = x / 255.0
     x = x.astype("float32")

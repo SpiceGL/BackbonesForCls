@@ -23,7 +23,6 @@ from core.optimizers import *
 from models.build import BuildNet
 
 
-###python mytools/train.py mycfg/models/mobilenet_v3_small.py.py --seed 7 --split-validation --deterministic
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a model')
     parser.add_argument('config', default="mycfg/models/van_tiny.py", help='train config file path')
@@ -56,6 +55,7 @@ def parse_args():
     return args
 
 
+### python mytools/train.py mycfg/models/mobilenet_v3_small.py --split-validation --seed 7 --deterministic
 def main():
     # 读取配置文件获取关键字段
     args = parse_args()
@@ -97,10 +97,10 @@ def main():
         val_datas = total_datas[val_start:val_end]
     else:
         train_datas = total_datas.copy()
-        test_annotations    = 'mydatas/test2.txt'
+        test_annotations    = 'mydatas/val2.txt'
         with open(test_annotations, encoding='utf-8') as f:
             val_datas = f.readlines()
-    test2_annotations = 'mydatas/test2.txt'
+    test2_annotations = 'mydatas/val2.txt'
     with open(test2_annotations, encoding='utf-8') as f:
         val2_datas = f.readlines()
 
@@ -135,7 +135,7 @@ def main():
     val2_dataset = Mydataset(val2_datas, val_pipeline, no_pipeline, 0)
     train_loader = DataLoader(train_dataset, shuffle=True, batch_size=data_cfg.get('batch_size'), num_workers=data_cfg.get('num_workers'),pin_memory=True, drop_last=True, collate_fn=collate)
     val_loader = DataLoader(val_dataset, shuffle=False, batch_size=data_cfg.get('batch_size'), num_workers=data_cfg.get('num_workers'), pin_memory=True, drop_last=True, collate_fn=collate)
-    val2_loader = DataLoader(val2_dataset, shuffle=False, batch_size=data_cfg.get('batch_size'), num_workers=data_cfg.get('num_workers'), pin_memory=True, drop_last=True, collate_fn=collate)
+    val2_loader = DataLoader(val2_dataset, shuffle=False, batch_size=data_cfg.get('batch_size'), num_workers=data_cfg.get('num_workers'), pin_memory=True, drop_last=False, collate_fn=collate)
     #print("val2_loader :", len(val2_loader))
     # 将关键字段存储，方便训练时同步调用&更新
     runner = dict(
@@ -171,6 +171,7 @@ def main():
                               val_loss = [],
                               train_acc = [],
                               val_acc = [])
+    meta2 = meta.copy()
     
     # 是否从中断处恢复训练
     if args.resume_from:

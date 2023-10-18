@@ -310,8 +310,8 @@ def validation(model, runner, cfg, device, epoch, epoches, meta):
     if eval_results.get('accuracy_top-1') > runner.get('best_val_acc'):
         runner['best_val_acc'] = eval_results.get('accuracy_top-1')
         meta['best_val_acc'] = runner['best_val_acc']
-        if epoch > 0 and os.path.isfile(runner['best_val_weight']):
-            os.remove(runner['best_val_weight'])
+        # if epoch > 0 and os.path.isfile(runner['best_val_weight']):
+        #     os.remove(runner['best_val_weight'])
         runner['best_val_weight'] = os.path.join(meta['save_dir'], 'Val_Epoch{:03}-Acc{:.3f}.pth'.format(epoch + 1,
                                                                                                          eval_results.get(
                                                                                                              'accuracy_top-1')))
@@ -341,7 +341,7 @@ def validation2(model, runner, cfg, device, epoch, epoches, meta):
     
     eval_results = evaluate(torch.cat(preds), torch.cat(targets), cfg.get('metrics'), cfg.get('metric_options'))
     
-    meta['train_info']['val_acc'].append(eval_results)
+    # meta['train_info']['val_acc'].append(eval_results)
     
     TITLE = 'Validation2 Results'
     TABLE_DATA = (
@@ -359,12 +359,14 @@ def validation2(model, runner, cfg, device, epoch, epoches, meta):
     print(table_instance.table)
     print()
     
-    # print(runner.get('best_val_weight').split(".")[0] + "_val2best.pth")
-    if eval_results.get('accuracy_top-1') >= runner.get('best_val_acc'):
-        runner['best_val_acc'] = eval_results.get('accuracy_top-1')
+    # print(eval_results.get('accuracy_top-1'))
+    if eval_results.get('accuracy_top-1') >= runner.get('best_val_acc') - 5:
+        if eval_results.get('accuracy_top-1') >= runner.get('best_val_acc'):
+            runner['best_val_acc'] = eval_results.get('accuracy_top-1')
         # meta['best_val_acc'] = runner['best_val_acc']
         # if epoch > 0 and os.path.isfile(runner['best_val_weight']):
         #     os.remove(runner['best_val_weight'])
+        
         runner['best_val_weight'] = os.path.join(meta['save_dir'], 'Val2_Epoch{:03}-Acc{:.3f}.pth'.format(epoch + 1,
                                                                                                          eval_results.get(
                                                                                                              'accuracy_top-1')))
